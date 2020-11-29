@@ -1,0 +1,14 @@
+
+@studentNotesUri=http://localhost:8000/api
+### insert new course
+POST {{studentNotesUri}}/courses
+Accept: application/json
+Content-Type: application/json
+
+{
+    "CourseName": "Econometrie",
+    "CourseTag": "Seminar"
+}
+
+### get all courses
+GET {{studentNotesUri}}/courses
