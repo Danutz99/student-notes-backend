@@ -1,5 +1,20 @@
 
 @studentNotesUri=http://localhost:8000/api
+### insert new student
+POST {{studentNotesUri}}/student
+Accept: application/json
+Content-Type: application/json
+
+{
+    "StudentId": "108760451373783497228",
+    "StudentName": "Paraschiv-Dan Mamaliga",
+    "StudentEmail": "mamaligaparaschiv18@stud.ase.ro",
+    "StudentSchool": "ASE Bucuresti"
+}
+
+### get student by id
+GET {{studentNotesUri}}/student/108760451373783497228
+
 ### insert new course
 POST {{studentNotesUri}}/courses
 Accept: application/json
@@ -12,3 +27,16 @@ Content-Type: application/json
 
 ### get all courses
 GET {{studentNotesUri}}/courses
+
+### add course to student
+POST {{studentNotesUri}}/courseStudent
+Accept: application/json
+Content-Type: application/json
+
+{
+    "CourseId": "1",
+    "StudentId": "108760451373783497228"
+}
+
+### get all student courses
+GET {{studentNotesUri}}/student/108760451373783497228/courses
