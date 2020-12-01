@@ -77,7 +77,12 @@ async function getStudentCourseNotes(studentId, courseId){
 }
 
 async function getStudentCourseNote(studentId, courseId, noteId){
-  return await Note.findAll({ where: {NoteId: noteId, StudentId: studentId, CourseId: courseId } });
+  return await Note.findOne({ where: {NoteId: noteId, StudentId: studentId, CourseId: courseId } });
+}
+
+async function updateStudentCourseNote(studentId, courseId, noteId, updatedContent){
+  let note =  await Note.findOne({ where: {NoteId: noteId, StudentId: studentId, CourseId: courseId } });
+  return await note.update({NoteContent: updatedContent});
 }
 
   router.route('/courses').post(async (req, res) => {
@@ -114,6 +119,10 @@ router.route('/student/:studentId/course/:courseId/notes').get(async (req, res) 
 
 router.route('/student/:studentId/course/:courseId/note/:noteId').get(async (req, res) => {
   return res.json(await getStudentCourseNote(req.params.studentId, req.params.courseId, req.params.noteId));
+})
+
+router.route('/student/:studentId/course/:courseId/note/:noteId').put(async (req, res) => {
+  return res.json(await updateStudentCourseNote(req.params.studentId, req.params.courseId, req.params.noteId, req.body.NoteContent));
 })
 
 let port = process.env.PORT || 8000;

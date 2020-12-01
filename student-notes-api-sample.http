@@ -1,19 +1,20 @@
 
 @studentNotesUri=http://localhost:8000/api
+@danUserID=108760451373783497228
 ### insert new student
 POST {{studentNotesUri}}/student
 Accept: application/json
 Content-Type: application/json
 
 {
-    "StudentId": "108760451373783497228",
+    "StudentId": {{danUserID}},
     "StudentName": "Paraschiv-Dan Mamaliga",
     "StudentEmail": "mamaligaparaschiv18@stud.ase.ro",
     "StudentSchool": "ASE Bucuresti"
 }
 
 ### get student by id
-GET {{studentNotesUri}}/student/108760451373783497228
+GET {{studentNotesUri}}/student/{{danUserID}}
 
 ### insert new course
 POST {{studentNotesUri}}/courses
@@ -35,11 +36,11 @@ Content-Type: application/json
 
 {
     "CourseId": "1",
-    "StudentId": "108760451373783497228"
+    "StudentId": {{danUserID}}
 }
 
 ### get all student courses
-GET {{studentNotesUri}}/student/108760451373783497228/courses
+GET {{studentNotesUri}}/student/{{danUserID}}/courses
 
 ### add note to student course
 POST {{studentNotesUri}}/note
@@ -48,11 +49,19 @@ Content-Type: application/json
 
 {   "NoteContent": "`Hi, this is a second test note!`",
     "CourseId": "1",
-    "StudentId": "108760451373783497228"
+    "StudentId": {{danUserID}}
 }
 
 ### get student course notes
-GET {{studentNotesUri}}/student/108760451373783497228/course/1/notes
+GET {{studentNotesUri}}/student/{{danUserID}}/course/1/notes
 
 ### get student course note
-GET {{studentNotesUri}}/student/108760451373783497228/course/1/note/1
+GET {{studentNotesUri}}/student/{{danUserID}}/course/1/note/1
+
+### edit note
+PUT {{studentNotesUri}}/student/{{danUserID}}/course/1/note/1
+Accept: application/json
+Content-Type: application/json
+
+{   "NoteContent": "`Hi, this is a fourth test note!`"
+}
