@@ -21,8 +21,8 @@ Accept: application/json
 Content-Type: application/json
 
 {
-    "CourseName": "Econometrie",
-    "CourseTag": "Seminar"
+    "CourseName": "DAM",
+    "CourseTag": "Curs"
 }
 
 ### get all courses
@@ -40,3 +40,19 @@ Content-Type: application/json
 
 ### get all student courses
 GET {{studentNotesUri}}/student/108760451373783497228/courses
+
+### add note to student course
+POST {{studentNotesUri}}/note
+Accept: application/json
+Content-Type: application/json
+
+{   "NoteContent": "`Hi, this is a second test note!`",
+    "CourseId": "1",
+    "StudentId": "108760451373783497228"
+}
+
+### get student course notes
+GET {{studentNotesUri}}/student/108760451373783497228/course/1/notes
+
+### get student course note
+GET {{studentNotesUri}}/student/108760451373783497228/course/1/note/1
