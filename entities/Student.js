@@ -5,7 +5,7 @@ const Student = db.define("Student",
 {
     StudentId:
     {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         primaryKey: true,
         autoIncrement: false,
         allowNull: false

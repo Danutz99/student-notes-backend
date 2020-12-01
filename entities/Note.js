@@ -10,6 +10,11 @@ const Note = db.define("Note",
         autoIncrement: true,
         allowNull: false
     },
+    NoteTitle: 
+    {
+        type: Sequelize.STRING,
+        allowNull: true
+    },
     NoteContent: 
     {
         type: Sequelize.STRING,
@@ -17,7 +22,7 @@ const Note = db.define("Note",
     },
     StudentId:
     {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         primaryKey: true,
         autoIncrement: false,
         allowNull: false

@@ -7,7 +7,7 @@ Accept: application/json
 Content-Type: application/json
 
 {
-    "StudentId": {{danUserID}},
+    "StudentId": "{{danUserID}}",
     "StudentName": "Paraschiv-Dan Mamaliga",
     "StudentEmail": "mamaligaparaschiv18@stud.ase.ro",
     "StudentSchool": "ASE Bucuresti"
@@ -22,7 +22,7 @@ Accept: application/json
 Content-Type: application/json
 
 {
-    "CourseName": "DAM",
+    "CourseName": "Multimedia",
     "CourseTag": "Curs"
 }
 
@@ -36,7 +36,7 @@ Content-Type: application/json
 
 {
     "CourseId": "1",
-    "StudentId": {{danUserID}}
+    "StudentId": "{{danUserID}}"
 }
 
 ### get all student courses
@@ -47,9 +47,10 @@ POST {{studentNotesUri}}/note
 Accept: application/json
 Content-Type: application/json
 
-{   "NoteContent": "`Hi, this is a second test note!`",
+{   "NoteTitle": "Smth meaningful",
+    "NoteContent": "`Hi, this is a second test note!`",
     "CourseId": "1",
-    "StudentId": {{danUserID}}
+    "StudentId": "{{danUserID}}"
 }
 
 ### get student course notes
@@ -65,3 +66,6 @@ Content-Type: application/json
 
 {   "NoteContent": "`Hi, this is a fourth test note!`"
 }
+
+### delete student course note
+Delete {{studentNotesUri}}/student/{{danUserID}}/course/1/note/2

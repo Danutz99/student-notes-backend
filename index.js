@@ -12,7 +12,7 @@ let router = express.Router();
 
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
+  res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT,DELETE");
   res.header("Access-Control-Allow-Headers", "Access-Control-Allow-Headers, Origin, X-Requested-With, Content-Type, Accept, Authorization");
   next();
 });
@@ -85,6 +85,21 @@ async function updateStudentCourseNote(studentId, courseId, noteId, updatedConte
   return await note.update({NoteContent: updatedContent});
 }
 
+async function deleteNote(studentId, courseId, noteId){
+  let note = await Note.findOne({ where: {NoteId: noteId, StudentId: studentId, CourseId: courseId } });
+
+  if (!note){
+    console.log("This element does not exist, so it cannot be deleted");
+    return;
+  }  
+
+  try{
+      return await note.destroy();
+  }catch(e){
+      throw(e);  
+  }
+}
+
   router.route('/courses').post(async (req, res) => {
     return res.json(await createCourse(req.body));
   })
@@ -123,6 +138,10 @@ router.route('/student/:studentId/course/:courseId/note/:noteId').get(async (req
 
 router.route('/student/:studentId/course/:courseId/note/:noteId').put(async (req, res) => {
   return res.json(await updateStudentCourseNote(req.params.studentId, req.params.courseId, req.params.noteId, req.body.NoteContent));
+})
+
+router.route('/student/:studentId/course/:courseId/note/:noteId').delete(async (req, res) => {
+  return res.json(await deleteNote(req.params.studentId, req.params.courseId, req.params.noteId));
 })
 
 let port = process.env.PORT || 8000;

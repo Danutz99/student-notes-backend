@@ -12,7 +12,7 @@ const CourseStudent = db.define("CourseStudent",
     },
     StudentId: 
     {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         primaryKey: true,
         autoIncrement: false,
         allowNull: false
