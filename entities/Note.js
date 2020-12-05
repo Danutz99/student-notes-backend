@@ -20,6 +20,11 @@ const Note = db.define("Note",
         type: Sequelize.STRING,
         allowNull: false
     },
+    NoteDate: 
+    {
+        type: Sequelize.DATE,
+        allowNull: true
+    },
     StudentId:
     {
         type: Sequelize.STRING,
