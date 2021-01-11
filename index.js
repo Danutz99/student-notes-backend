@@ -5,6 +5,9 @@ import Course from './entities/Course.js';
 import Student from './entities/Student.js';
 import CourseStudent from './entities/CourseStudent.js';
 import Note from './entities/Note.js';
+import StudyGroup from './entities/StudyGroup.js';
+import StudyGroupStudent from './entities/StudyGroupStudent.js';
+
 
 
 let app = express();
@@ -37,6 +40,9 @@ db.authenticate()
   Course.hasMany(Note, {as: "Notes", foreignKey: "CourseId"});
   Note.belongsTo(Course, {foreignKey: "CourseId"});
 
+  Student.belongsToMany(StudyGroup, {through: "StudyGroupStudent", as: "StudyGroups", foreignKey: "StudentId"});
+  StudyGroup.belongsToMany(Student, {through: "StudyGroupStudent", as: "Students", foreignKey: "StudyGroupId"});
+
   async function createCourse(course){
       return await Course.create(course);
   }
@@ -44,6 +50,10 @@ db.authenticate()
   async function createStudent(student){
     return await Student.create(student);
   }
+
+  async function createStudyGroup(studyGroup){
+    return await StudyGroup.create(studyGroup);
+}
 
   async function createNote(note){
     return await Note.create(note);
@@ -61,6 +71,10 @@ db.authenticate()
     return await CourseStudent.create(courseStudent);
   }
 
+  async function associateStudyGroupStudent(studyGroupStudent){
+    return await StudyGroupStudent.create(studyGroupStudent);
+  }
+
   async function getStudentCourses(studentId){
     return await Student.findByPk(studentId, {
       include: [
@@ -70,6 +84,17 @@ db.authenticate()
           }
       ]
   })
+}
+
+async function getStudyGroupStudents(studyGroupId){
+  return await StudyGroup.findByPk(studyGroupId, {
+    include: [
+        {
+            model: Student,
+            as: "Students"
+        }
+    ]
+})
 }
 
 async function getStudentCourseNotes(studentId, courseId){
@@ -104,12 +129,20 @@ async function deleteNote(studentId, courseId, noteId){
     return res.json(await createCourse(req.body));
   })
 
+  router.route('/studyGroups').post(async (req, res) => {
+    return res.json(await createStudyGroup(req.body));
+  })
+
   router.route('/courses').get( async (req, res) => {
     return res.json(await getCourse());
 })
 
   router.route('/courseStudent').post(async (req, res) => {
   return res.json(await associateCourseStudent(req.body));
+})
+
+router.route('/studyGroupStudent').post(async (req, res) => {
+  return res.json(await associateStudyGroupStudent(req.body));
 })
 
 router.route('/student').post(async (req, res) => {
@@ -122,6 +155,10 @@ router.route('/student/:id').get(async (req, res) => {
 
 router.route('/student/:id/courses').get(async (req, res) => {
   return res.json(await getStudentCourses(req.params.id));
+})
+
+router.route('/studyGroup/:id/students').get(async (req, res) => {
+  return res.json(await getStudyGroupStudents(req.params.id));
 })
 
 router.route('/note').post( async (req, res) => {

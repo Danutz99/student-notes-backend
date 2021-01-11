@@ -22,8 +22,8 @@ Accept: application/json
 Content-Type: application/json
 
 {
-    "CourseName": "Multimedia",
-    "CourseTag": "Curs"
+    "CourseName": "PAW",
+    "CourseTag": "Seminar"
 }
 
 ### get all courses
@@ -69,3 +69,26 @@ Content-Type: application/json
 
 ### delete student course note
 Delete {{studentNotesUri}}/student/{{danUserID}}/course/1/note/2
+
+### insert new group
+POST {{studentNotesUri}}/studyGroups
+Accept: application/json
+Content-Type: application/json
+
+{
+    "StudyGroupName": "Tehnologii Web Proiect",
+    "StudyGroupDescription": "Grup pentru proiectul la tehnologii web"
+}
+
+### add student to group
+POST {{studentNotesUri}}/studyGroupStudent
+Accept: application/json
+Content-Type: application/json
+
+{
+    "StudyGroupId": "1",
+    "StudentId": "{{danUserID}}"
+}
+
+### get group students
+GET {{studentNotesUri}}/studyGroup/1/students

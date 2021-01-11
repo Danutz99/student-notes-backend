@@ -64,3 +64,30 @@ IF OBJECT_ID('FK_Note_Student') IS NULL
 	ALTER TABLE Note ADD CONSTRAINT FK_Note_Student FOREIGN KEY (StudentId) REFERENCES Student(StudentId)
 GO
 
+IF OBJECT_ID('StudyGroup') IS NULL
+	CREATE TABLE StudyGroup
+	(
+	StudyGroupId INT NOT NULL IDENTITY(1, 1),
+	StudyGroupName NVARCHAR(100) NOT NULL,
+	StudyGroupDescription NVARCHAR(200),
+	CONSTRAINT PK_StudyGroup PRIMARY KEY (StudyGroupId)
+	)
+GO
+
+IF OBJECT_ID('StudyGroupStudent') IS NULL
+	CREATE TABLE StudyGroupStudent
+	(
+	StudyGroupId INT NOT NULL,
+	StudentId NVARCHAR(100) NOT NULL,
+	CONSTRAINT PK_StudyGroupStudent PRIMARY KEY (StudyGroupId, StudentId)
+	)
+GO
+
+IF OBJECT_ID('FK_StudyGroupStudent_StudyGroup') IS NULL
+	ALTER TABLE StudyGroupStudent ADD CONSTRAINT FK_StudyGroupStudent_StudyGroup FOREIGN KEY (StudyGroupId) REFERENCES StudyGroup(StudyGroupId)
+GO
+
+IF OBJECT_ID('FK_StudyGroupStudent_Student') IS NULL
+	ALTER TABLE StudyGroupStudent ADD CONSTRAINT FK_StudyGroupStudent_Student FOREIGN KEY (StudentId) REFERENCES Student(StudentId)
+GO
+
