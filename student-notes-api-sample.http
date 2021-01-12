@@ -92,3 +92,6 @@ Content-Type: application/json
 
 ### get group students
 GET {{studentNotesUri}}/studyGroup/1/students
+
+### get student groups
+GET {{studentNotesUri}}/student/{{danUserID}}/studyGroups
