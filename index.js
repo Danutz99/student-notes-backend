@@ -42,6 +42,7 @@ db.authenticate()
 
   Student.belongsToMany(StudyGroup, {through: "StudyGroupStudent", as: "StudyGroups", foreignKey: "StudentId"});
   StudyGroup.belongsToMany(Student, {through: "StudyGroupStudent", as: "Students", foreignKey: "StudyGroupId"});
+  StudyGroup.belongsTo(Course, {foreignKey: "CourseId"});
 
   async function createCourse(course){
       return await Course.create(course);
@@ -112,6 +113,10 @@ async function getStudentCourseNotes(studentId, courseId){
   return await Note.findAll({ where: { StudentId: studentId, CourseId: courseId } });
 }
 
+async function getCourseStudyGroups(courseId){
+  return await StudyGroup.findAll({ where: {CourseId: courseId } });
+}
+
 async function getStudentCourseNote(studentId, courseId, noteId){
   return await Note.findOne({ where: {NoteId: noteId, StudentId: studentId, CourseId: courseId } });
 }
@@ -131,6 +136,21 @@ async function deleteNote(studentId, courseId, noteId){
 
   try{
       return await note.destroy();
+  }catch(e){
+      throw(e);  
+  }
+}removeStudentFromStudyGroup
+
+async function removeStudentFromStudyGroup(studyGroupId, studentId){
+  let studyGroupStudent = await StudyGroupStudent.findOne({ where: {StudyGroupId: studyGroupId, StudentId: studentId} });
+
+  if (!studyGroupStudent){
+    console.log("This element does not exist, so it cannot be deleted");
+    return;
+  }  
+
+  try{
+      return await studyGroupStudent.destroy();
   }catch(e){
       throw(e);  
   }
@@ -168,6 +188,7 @@ router.route('/student/:id/courses').get(async (req, res) => {
   return res.json(await getStudentCourses(req.params.id));
 })
 
+
 router.route('/studyGroup/:id/students').get(async (req, res) => {
   return res.json(await getStudyGroupStudents(req.params.id));
 })
@@ -184,6 +205,10 @@ router.route('/student/:studentId/course/:courseId/notes').get(async (req, res) 
   return res.json(await getStudentCourseNotes(req.params.studentId, req.params.courseId));
 })
 
+router.route('/course/:courseId/studyGroups').get(async (req, res) => {
+  return res.json(await getCourseStudyGroups(req.params.courseId));
+})
+
 router.route('/student/:studentId/course/:courseId/note/:noteId').get(async (req, res) => {
   return res.json(await getStudentCourseNote(req.params.studentId, req.params.courseId, req.params.noteId));
 })
@@ -194,6 +219,10 @@ router.route('/student/:studentId/course/:courseId/note/:noteId').put(async (req
 
 router.route('/student/:studentId/course/:courseId/note/:noteId').delete(async (req, res) => {
   return res.json(await deleteNote(req.params.studentId, req.params.courseId, req.params.noteId));
+})
+
+router.route('/studyGroup/:id/students/:studentId').delete(async (req, res) => {
+  return res.json(await removeStudentFromStudyGroup(req.params.id, req.params.studentId));
 })
 
 let port = process.env.PORT || 8000;

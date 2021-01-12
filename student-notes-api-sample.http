@@ -76,8 +76,9 @@ Accept: application/json
 Content-Type: application/json
 
 {
-    "StudyGroupName": "Tehnologii Web Proiect",
-    "StudyGroupDescription": "Grup pentru proiectul la tehnologii web"
+    "StudyGroupName": "Tehnologi Web Proiect",
+    "StudyGroupDescription": "Grup pentru proiectul la tehnologi web",
+    "CourseId": "1"
 }
 
 ### add student to group
@@ -95,3 +96,9 @@ GET {{studentNotesUri}}/studyGroup/1/students
 
 ### get student groups
 GET {{studentNotesUri}}/student/{{danUserID}}/studyGroups
+
+### get course groups
+GET {{studentNotesUri}}/course/1/studyGroups
+
+### remove student from study group
+Delete {{studentNotesUri}}/studyGroup/1/students/{{danUserID}}

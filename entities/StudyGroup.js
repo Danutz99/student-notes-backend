@@ -19,7 +19,14 @@ const StudyGroup = db.define("StudyGroup",
     {
         type: Sequelize.STRING,
         allowNull: true
-    }
+    },
+    CourseId:
+    {
+        type: Sequelize.INTEGER,
+        primaryKey: true,
+        autoIncrement: false,
+        allowNull: false
+    },
 });
 
 export default StudyGroup;
