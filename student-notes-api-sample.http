@@ -1,6 +1,7 @@
 
 @studentNotesUri=http://localhost:8000/api
 @danUserID=108760451373783497228
+@danSecondUserID=112646216218646035390
 ### insert new student
 POST {{studentNotesUri}}/student
 Accept: application/json
@@ -40,7 +41,7 @@ Content-Type: application/json
 }
 
 ### get all student courses
-GET {{studentNotesUri}}/student/{{danUserID}}/courses
+GET {{studentNotesUri}}/student/{{danSecondUserID}}/courses
 
 ### add note to student course
 POST {{studentNotesUri}}/note
@@ -98,7 +99,7 @@ GET {{studentNotesUri}}/studyGroup/1/students
 GET {{studentNotesUri}}/studyGroup/7/students/external
 
 ### get student groups
-GET {{studentNotesUri}}/student/{{danUserID}}/studyGroups
+GET {{studentNotesUri}}/student/{{danSecondUserID}}/studyGroups
 
 ### get course groups
 GET {{studentNotesUri}}/course/1/studyGroups
@@ -108,3 +109,30 @@ Delete {{studentNotesUri}}/studyGroup/1/students/{{danUserID}}
 
 ### delete study group
 Delete {{studentNotesUri}}/studyGroup/2
+
+### create invitation
+POST {{studentNotesUri}}/invitation
+Accept: application/json
+Content-Type: application/json
+
+[{
+    "StudentId": "{{danSecondUserID}}",
+    "InviterId": "{{danUserID}}",
+    "InviterName": "Mamaliga Paraschiv Dan",
+    "StudyGroupId": "7",
+    "StudyGroupName": "test-invite-1"
+},
+{
+    "StudentId": "{{danSecondUserID}}",
+    "InviterId": "{{danUserID}}",
+    "InviterName": "Mamaliga Paraschiv Dan",
+    "StudyGroupId": "10",
+    "StudyGroupName": "test-invite-2"
+}
+]
+
+### get student invitations
+GET {{studentNotesUri}}/student/{{danSecondUserID}}/invitation
+
+### delete student invitation
+Delete {{studentNotesUri}}/invitation/7

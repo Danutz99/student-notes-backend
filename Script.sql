@@ -96,3 +96,24 @@ IF OBJECT_ID('FK_StudyGroup_Course') IS NULL
 	ALTER TABLE StudyGroup ADD CONSTRAINT FK_StudyGroup_Course FOREIGN KEY (CourseId) REFERENCES Course(CourseId) ON DELETE CASCADE
 GO
 
+IF OBJECT_ID('Invitation') IS NULL
+	CREATE TABLE Invitation
+	(
+	InvitationId INT NOT NULL IDENTITY(1, 1),
+	StudentId NVARCHAR(100) NOT NULL,
+	InviterId NVARCHAR(200) NOT NULL,
+	InviterName NVARCHAR(100) NOT NULL,
+	StudyGroupId INT NOT NULL,
+	StudyGroupName NVARCHAR(100) NOT NULL,
+	CONSTRAINT PK_Invitation PRIMARY KEY (InvitationId)
+	)
+GO
+
+IF OBJECT_ID('FK_Invitation_Student') IS NULL
+	ALTER TABLE Invitation ADD CONSTRAINT FK_Invitation_Student FOREIGN KEY (StudentId) REFERENCES Student(StudentId) ON DELETE CASCADE
+GO
+
+IF OBJECT_ID('FK_Invitation_StudyGroup') IS NULL
+	ALTER TABLE Invitation ADD CONSTRAINT FK_Invitation_StudyGroup FOREIGN KEY (StudyGroupId) REFERENCES StudyGroup(StudyGroupId) ON DELETE CASCADE
+GO
+

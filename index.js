@@ -7,6 +7,7 @@ import CourseStudent from './entities/CourseStudent.js';
 import Note from './entities/Note.js';
 import StudyGroup from './entities/StudyGroup.js';
 import StudyGroupStudent from './entities/StudyGroupStudent.js';
+import Invitation from './entities/Invitation.js';
 import Sequelize from 'sequelize';
 
 
@@ -44,6 +45,9 @@ db.authenticate()
   Student.belongsToMany(StudyGroup, {through: "StudyGroupStudent", as: "StudyGroups", foreignKey: "StudentId"});
   StudyGroup.belongsToMany(Student, {through: "StudyGroupStudent", as: "Students", foreignKey: "StudyGroupId"});
   StudyGroup.belongsTo(Course, {foreignKey: "CourseId"});
+
+  Invitation.belongsTo(Student, {foreignKey: "StudentId"});
+  Invitation.belongsTo(StudyGroup, {foreignKey: "StudyGroupId"})
 
   async function createCourse(course){
       return await Course.create(course);
@@ -184,15 +188,43 @@ async function deleteStudyGroup(studyGroupId){
   }
 }
 
-  router.route('/courses').post(async (req, res) => {
+async function createInvitations(invitations){
+  return await invitations.forEach(invitation => {
+     Invitation.create(invitation);
+  });
+}
+
+async function getInvitations(studentId){
+  return await Invitation.findAll({ where: { StudentId: studentId}});
+}
+
+async function deleteInvitation(invitationId){
+  let invitation = await Invitation.findByPk(invitationId);
+  if (!invitation){
+    console.log("This element does not exist, so it cannot be deleted");
+    return;
+  }  
+
+  try{
+      return await invitation.destroy();
+  }catch(e){
+      throw(e);  
+  }
+}
+
+async function getStudyGroup(studyGroupId){
+  return await StudyGroup.findByPk(studyGroupId);
+}
+
+router.route('/courses').post(async (req, res) => {
     return res.json(await createCourse(req.body));
   })
 
-  router.route('/studyGroups').post(async (req, res) => {
+router.route('/studyGroups').post(async (req, res) => {
     return res.json(await createStudyGroup(req.body));
   })
 
-  router.route('/courses').get( async (req, res) => {
+router.route('/courses').get( async (req, res) => {
     return res.json(await getCourses());
 })
 
@@ -259,6 +291,22 @@ router.route('/studyGroup/:id').delete(async (req, res) => {
 
 router.route('/studyGroup/:id/students/external').get( async (req, res) => {
   return res.json(await getStudentsNotInStudyGroup(req.params.id));
+})
+
+router.route('/invitation').post( async (req, res) => {
+  return res.json(await createInvitations(req.body));
+})
+
+router.route('/student/:id/invitation').get( async (req, res) => {
+  return res.json(await getInvitations(req.params.id));
+})
+
+router.route('/invitation/:id').delete(async (req, res) => {
+  return res.json(await deleteInvitation(req.params.id));
+})
+
+router.route('/studyGroup/:id').get( async (req, res) => {
+  return res.json(await getStudyGroup(req.params.id));
 })
 
 let port = process.env.PORT || 8000;
