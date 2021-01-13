@@ -70,6 +70,7 @@ IF OBJECT_ID('StudyGroup') IS NULL
 	StudyGroupId INT NOT NULL IDENTITY(1, 1),
 	StudyGroupName NVARCHAR(100) NOT NULL,
 	StudyGroupDescription NVARCHAR(200),
+	CourseId INT NOT NULL,
 	CONSTRAINT PK_StudyGroup PRIMARY KEY (StudyGroupId)
 	)
 GO
@@ -84,10 +85,14 @@ IF OBJECT_ID('StudyGroupStudent') IS NULL
 GO
 
 IF OBJECT_ID('FK_StudyGroupStudent_StudyGroup') IS NULL
-	ALTER TABLE StudyGroupStudent ADD CONSTRAINT FK_StudyGroupStudent_StudyGroup FOREIGN KEY (StudyGroupId) REFERENCES StudyGroup(StudyGroupId)
+	ALTER TABLE StudyGroupStudent ADD CONSTRAINT FK_StudyGroupStudent_StudyGroup FOREIGN KEY (StudyGroupId) REFERENCES StudyGroup(StudyGroupId) ON DELETE CASCADE
 GO
 
 IF OBJECT_ID('FK_StudyGroupStudent_Student') IS NULL
-	ALTER TABLE StudyGroupStudent ADD CONSTRAINT FK_StudyGroupStudent_Student FOREIGN KEY (StudentId) REFERENCES Student(StudentId)
+	ALTER TABLE StudyGroupStudent ADD CONSTRAINT FK_StudyGroupStudent_Student FOREIGN KEY (StudentId) REFERENCES Student(StudentId) ON DELETE CASCADE
+GO
+
+IF OBJECT_ID('FK_StudyGroup_Course') IS NULL
+	ALTER TABLE StudyGroup ADD CONSTRAINT FK_StudyGroup_Course FOREIGN KEY (CourseId) REFERENCES Course(CourseId) ON DELETE CASCADE
 GO
 

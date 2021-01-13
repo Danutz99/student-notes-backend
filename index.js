@@ -139,7 +139,7 @@ async function deleteNote(studentId, courseId, noteId){
   }catch(e){
       throw(e);  
   }
-}removeStudentFromStudyGroup
+}
 
 async function removeStudentFromStudyGroup(studyGroupId, studentId){
   let studyGroupStudent = await StudyGroupStudent.findOne({ where: {StudyGroupId: studyGroupId, StudentId: studentId} });
@@ -151,6 +151,20 @@ async function removeStudentFromStudyGroup(studyGroupId, studentId){
 
   try{
       return await studyGroupStudent.destroy();
+  }catch(e){
+      throw(e);  
+  }
+}
+
+async function deleteStudyGroup(studyGroupId){
+  let studyGroup = await StudyGroup.findByPk(studyGroupId);
+  if (!studyGroup){
+    console.log("This element does not exist, so it cannot be deleted");
+    return;
+  }  
+
+  try{
+      return await studyGroup.destroy();
   }catch(e){
       throw(e);  
   }
@@ -223,6 +237,10 @@ router.route('/student/:studentId/course/:courseId/note/:noteId').delete(async (
 
 router.route('/studyGroup/:id/students/:studentId').delete(async (req, res) => {
   return res.json(await removeStudentFromStudyGroup(req.params.id, req.params.studentId));
+})
+
+router.route('/studyGroup/:id').delete(async (req, res) => {
+  return res.json(await deleteStudyGroup(req.params.id));
 })
 
 let port = process.env.PORT || 8000;

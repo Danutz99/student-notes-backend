@@ -102,3 +102,6 @@ GET {{studentNotesUri}}/course/1/studyGroups
 
 ### remove student from study group
 Delete {{studentNotesUri}}/studyGroup/1/students/{{danUserID}}
+
+### delete study group
+Delete {{studentNotesUri}}/studyGroup/2
