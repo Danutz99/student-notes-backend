@@ -7,11 +7,12 @@ import CourseStudent from './entities/CourseStudent.js';
 import Note from './entities/Note.js';
 import StudyGroup from './entities/StudyGroup.js';
 import StudyGroupStudent from './entities/StudyGroupStudent.js';
-
+import Sequelize from 'sequelize';
 
 
 let app = express();
 let router = express.Router();
+const Op = Sequelize.Op;
 
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -64,7 +65,7 @@ db.authenticate()
     return await Student.findByPk(studentId);
   }
 
-  async function getCourse(){
+  async function getCourses(){
       return await Course.findAll();  
   }
   
@@ -115,6 +116,19 @@ async function getStudentCourseNotes(studentId, courseId){
 
 async function getCourseStudyGroups(courseId){
   return await StudyGroup.findAll({ where: {CourseId: courseId } });
+}
+
+async function getStudentsNotInStudyGroup(studyGroupId){
+  const studentsAlreadyInStudyGroup =  await StudyGroup.findByPk(studyGroupId, {
+    include: [
+        {
+            model: Student,
+            as: "Students"
+        }
+    ]
+});
+const studentsIds = studentsAlreadyInStudyGroup.Students.map(x => x.StudentId);
+  return await Student.findAll({ where: { StudentId: {[Op.notIn]: studentsIds}}});
 }
 
 async function getStudentCourseNote(studentId, courseId, noteId){
@@ -179,7 +193,7 @@ async function deleteStudyGroup(studyGroupId){
   })
 
   router.route('/courses').get( async (req, res) => {
-    return res.json(await getCourse());
+    return res.json(await getCourses());
 })
 
   router.route('/courseStudent').post(async (req, res) => {
@@ -241,6 +255,10 @@ router.route('/studyGroup/:id/students/:studentId').delete(async (req, res) => {
 
 router.route('/studyGroup/:id').delete(async (req, res) => {
   return res.json(await deleteStudyGroup(req.params.id));
+})
+
+router.route('/studyGroup/:id/students/external').get( async (req, res) => {
+  return res.json(await getStudentsNotInStudyGroup(req.params.id));
 })
 
 let port = process.env.PORT || 8000;
