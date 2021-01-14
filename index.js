@@ -233,6 +233,40 @@ async function getStudyGroup(studyGroupId){
   return await StudyGroup.findByPk(studyGroupId);
 }
 
+async function getStudentCourseStudyGroups(studentId, courseId){
+  const student = 
+    await Student.findByPk(studentId, {
+    include: [
+        {
+            model: StudyGroup,
+            as: "StudyGroups"
+        }
+    ]
+});
+const studentStudyGroups = student.StudyGroups;
+return studentStudyGroups.filter(x => x.CourseId == courseId)
+}
+
+async function shareNoteToStudyGroups(body){
+  const noteToShare = body.noteToShare;
+  const studyGroups = body.studyGroups; 
+    studyGroups.forEach(async (x) => {
+      const studyGroup = 
+      await getStudyGroupStudents(x.StudyGroupId);
+      let students = studyGroup.Students.filter(x => x.StudentId !== noteToShare.StudentId);
+      if(students.length !== 0){
+      const notes = students.map(y => {return {
+        NoteTitle: noteToShare.NoteTitle,
+        NoteContent: noteToShare.NoteContent,
+        StudentId: y.StudentId,
+        CourseId: noteToShare.CourseId
+      }});
+    createNotes(notes);
+      }
+    });
+return 
+}
+
 router.route('/courses').post(async (req, res) => {
     return res.json(await createCourse(req.body));
   })
@@ -331,6 +365,13 @@ router.route('/invitation/:id').delete(async (req, res) => {
 
 router.route('/studyGroup/:id').get( async (req, res) => {
   return res.json(await getStudyGroup(req.params.id));
+})
+
+router.route('/student/:id/course/:courseId/studyGroups').get( async (req, res) => {
+  return res.json(await getStudentCourseStudyGroups(req.params.id, req.params.courseId));
+})
+router.route('/note/studyGroups').post( async (req, res) => {
+  return res.json(await shareNoteToStudyGroups(req.body));
 })
 
 let port = process.env.PORT || 8000;

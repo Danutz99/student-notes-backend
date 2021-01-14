@@ -78,7 +78,7 @@ Content-Type: application/json
 GET {{studentNotesUri}}/student/{{danUserID}}/course/1/notes
 
 ### get student course note
-GET {{studentNotesUri}}/student/{{danUserID}}/course/1/note/1
+GET {{studentNotesUri}}/student/{{danSecondUserID}}/course/1/note/64
 
 ### edit note
 PUT {{studentNotesUri}}/student/{{danUserID}}/course/1/note/1
@@ -119,7 +119,7 @@ GET {{studentNotesUri}}/studyGroup/1/students
 GET {{studentNotesUri}}/studyGroup/7/students/external
 
 ### get student groups
-GET {{studentNotesUri}}/student/{{danSecondUserID}}/studyGroups
+GET {{studentNotesUri}}/student/{{danUserID}}/studyGroups
 
 ### get course groups
 GET {{studentNotesUri}}/course/1/studyGroups
@@ -156,3 +156,6 @@ GET {{studentNotesUri}}/student/{{danSecondUserID}}/invitation
 
 ### delete student invitation
 Delete {{studentNotesUri}}/invitation/7
+
+### get student course study groups
+GET {{studentNotesUri}}/student/{{danUserID}}/course/1/studyGroups
