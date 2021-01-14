@@ -92,6 +92,17 @@ db.authenticate()
   })
 }
 
+async function getCourseStudents(courseId){
+  return await Course.findByPk(courseId, {
+    include: [
+        {
+            model: Student,
+            as: "Students"
+        }
+    ]
+})
+}
+
 async function getStudyGroupStudents(studyGroupId){
   return await StudyGroup.findByPk(studyGroupId, {
     include: [
@@ -194,6 +205,12 @@ async function createInvitations(invitations){
   });
 }
 
+async function createNotes(notes){
+  return await notes.forEach(note => {
+     Note.create(note);
+  });
+}
+
 async function getInvitations(studentId){
   return await Invitation.findAll({ where: { StudentId: studentId}});
 }
@@ -248,6 +265,9 @@ router.route('/student/:id/courses').get(async (req, res) => {
   return res.json(await getStudentCourses(req.params.id));
 })
 
+router.route('/course/:id/students').get(async (req, res) => {
+  return res.json(await getCourseStudents(req.params.id));
+})
 
 router.route('/studyGroup/:id/students').get(async (req, res) => {
   return res.json(await getStudyGroupStudents(req.params.id));
@@ -259,6 +279,10 @@ router.route('/student/:id/studyGroups').get(async (req, res) => {
 
 router.route('/note').post( async (req, res) => {
   return res.json(await createNote(req.body));
+})
+
+router.route('/notes').post( async (req, res) => {
+  return res.json(await createNotes(req.body));
 })
 
 router.route('/student/:studentId/course/:courseId/notes').get(async (req, res) => {

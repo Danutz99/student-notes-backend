@@ -41,7 +41,10 @@ Content-Type: application/json
 }
 
 ### get all student courses
-GET {{studentNotesUri}}/student/{{danSecondUserID}}/courses
+GET {{studentNotesUri}}/student/{{danUserID}}/courses
+
+### get course students
+GET {{studentNotesUri}}/course/1/students
 
 ### add note to student course
 POST {{studentNotesUri}}/note
@@ -53,6 +56,23 @@ Content-Type: application/json
     "CourseId": "1",
     "StudentId": "{{danUserID}}"
 }
+
+### insert notes
+POST {{studentNotesUri}}/notes
+Accept: application/json
+Content-Type: application/json
+
+[ {  "NoteTitle": "Smth meaningful",
+    "NoteContent": "`Hi, this is a second test note!`",
+    "CourseId": "1",
+    "StudentId": "{{danUserID}}"
+},
+{  "NoteTitle": "Smth meaningful 2",
+    "NoteContent": "`Hi, this is a third test note!`",
+    "CourseId": "1",
+    "StudentId": "{{danSecondUserID}}"
+}
+]
 
 ### get student course notes
 GET {{studentNotesUri}}/student/{{danUserID}}/course/1/notes
