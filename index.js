@@ -8,6 +8,7 @@ import Note from "./entities/Note.js";
 import StudyGroup from "./entities/StudyGroup.js";
 import StudyGroupStudent from "./entities/StudyGroupStudent.js";
 import Invitation from "./entities/Invitation.js";
+import Attachment from "./entities/Attachment.js";
 import Sequelize from "sequelize";
 
 let app = express();
@@ -27,7 +28,7 @@ app.use(function(req, res, next) {
   next();
 });
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+app.use(bodyParser.json({limit: '50mb'}));
 app.use("/api", router);
 
 db.authenticate()
@@ -95,12 +96,16 @@ async function getCourses() {
 }
 
 async function associateCourseStudent(courseStudent) {
-  let existingCourseStudent = CourseStudent.findOne({where: { StudentId: courseStudent.StudentId, CourseId: courseStudent.CourseId }});
-  if(existingCourseStudent === null){
-  return await CourseStudent.create(courseStudent);
-  }
-  else {
-  return { message: "Already created!" };
+  let existingCourseStudent = CourseStudent.findOne({
+    where: {
+      StudentId: courseStudent.StudentId,
+      CourseId: courseStudent.CourseId
+    }
+  });
+  if (existingCourseStudent === null) {
+    return await CourseStudent.create(courseStudent);
+  } else {
+    return { message: "Already created!" };
   }
 }
 
@@ -315,6 +320,10 @@ async function shareNoteToStudyGroups(body) {
   return;
 }
 
+async function createAttachment(attachment) {
+  return await Attachment.create(attachment);
+}
+
 router.route("/courses").post(async (req, res) => {
   let course = req.body;
   if (course.CourseName.length === 0 || course.CourseName === undefined)
@@ -507,6 +516,10 @@ router
   });
 router.route("/note/studyGroups").post(async (req, res) => {
   return res.json(await shareNoteToStudyGroups(req.body));
+});
+
+router.route("/note/attachment").post(async (req, res) => {
+  return res.json(await createAttachment(req.body));
 });
 
 let port = process.env.PORT || 8000;

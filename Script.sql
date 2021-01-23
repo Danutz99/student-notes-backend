@@ -117,3 +117,22 @@ IF OBJECT_ID('FK_Invitation_StudyGroup') IS NULL
 	ALTER TABLE Invitation ADD CONSTRAINT FK_Invitation_StudyGroup FOREIGN KEY (StudyGroupId) REFERENCES StudyGroup(StudyGroupId) ON DELETE CASCADE
 GO
 
+IF OBJECT_ID('Attachment') IS NULL
+	CREATE TABLE Attachment
+	(
+	AttachmentId INT NOT NULL IDENTITY(1, 1),
+	AttachmentContent VARBINARY(MAX) NOT NULL,
+	AttachmentName NVARCHAR(100) NOT NULL,
+	AttachmentType NVARCHAR(100) NOT NULL,
+	AttachmentSize NVARCHAR(100) NOT NULL,
+	NoteId INT NOT NULL,
+	CourseId INT NOT NULL,
+	StudentId NVARCHAR(100) NOT NULL
+	CONSTRAINT PK_Attachment PRIMARY KEY (AttachmentId)
+	)
+GO
+
+IF OBJECT_ID('FK_Attachment_Note') IS NULL
+	ALTER TABLE Attachment ADD CONSTRAINT FK_Attachment_Note FOREIGN KEY (NoteId,CourseId,StudentId) REFERENCES Note(NoteId,CourseId,StudentId) ON DELETE CASCADE
+GO
+
