@@ -96,13 +96,13 @@ async function getCourses() {
 }
 
 async function associateCourseStudent(courseStudent) {
-  let existingCourseStudent = CourseStudent.findOne({
+  let existingCourseStudent = await CourseStudent.findOne({
     where: {
       StudentId: courseStudent.StudentId,
       CourseId: courseStudent.CourseId
     }
   });
-  if (existingCourseStudent === null) {
+  if (existingCourseStudent === null || existingCourseStudent === undefined) {
     return await CourseStudent.create(courseStudent);
   } else {
     return { message: "Already created!" };
@@ -329,7 +329,7 @@ async function getAttachments(noteId) {
 }
 
 async function deleteAttachment(attachmentId) {
-  let attachment = await Attachment.findByPk(attachment);
+  let attachment = await Attachment.findByPk(attachmentId);
   if (!attachment) {
     console.log("This element does not exist, so it cannot be deleted");
     return;
@@ -544,7 +544,7 @@ router.route("/note/:id/attachments").get(async (req, res) => {
   return res.json(await getAttachments(req.params.id));
 });
 
-router.route("attachment/:id").delete(async (req, res) => {
+router.route("/attachment/:id").delete(async (req, res) => {
   return res.json(await deleteAttachment(req.params.id));
 });
 
