@@ -12,7 +12,7 @@ const Attachment = db.define("Attachment",
     },
     AttachmentContent: 
     {
-        type: Sequelize.BLOB('long'),
+        type: Sequelize.STRING,
         allowNull: false
     },
     AttachmentName: 

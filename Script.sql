@@ -121,7 +121,7 @@ IF OBJECT_ID('Attachment') IS NULL
 	CREATE TABLE Attachment
 	(
 	AttachmentId INT NOT NULL IDENTITY(1, 1),
-	AttachmentContent VARBINARY(MAX) NOT NULL,
+	AttachmentContent NVARCHAR(MAX) NOT NULL,
 	AttachmentName NVARCHAR(100) NOT NULL,
 	AttachmentType NVARCHAR(100) NOT NULL,
 	AttachmentSize NVARCHAR(100) NOT NULL,
