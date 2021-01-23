@@ -324,6 +324,24 @@ async function createAttachment(attachment) {
   return await Attachment.create(attachment);
 }
 
+async function getAttachments(noteId) {
+  return await Attachment.findAll({ where: { NoteId: noteId } });
+}
+
+async function deleteAttachment(attachmentId) {
+  let attachment = await Attachment.findByPk(attachment);
+  if (!attachment) {
+    console.log("This element does not exist, so it cannot be deleted");
+    return;
+  }
+
+  try {
+    return await attachment.destroy();
+  } catch (e) {
+    throw e;
+  }
+}
+
 router.route("/courses").post(async (req, res) => {
   let course = req.body;
   if (course.CourseName.length === 0 || course.CourseName === undefined)
@@ -520,6 +538,14 @@ router.route("/note/studyGroups").post(async (req, res) => {
 
 router.route("/note/attachment").post(async (req, res) => {
   return res.json(await createAttachment(req.body));
+});
+
+router.route("/note/:id/attachments").get(async (req, res) => {
+  return res.json(await getAttachments(req.params.id));
+});
+
+router.route("attachment/:id").delete(async (req, res) => {
+  return res.json(await deleteAttachment(req.params.id));
 });
 
 let port = process.env.PORT || 8000;
